@@ -18,7 +18,7 @@ UNIFIED_MEMORY_SET="no"
 
 env = os.environ
 
-if env["UNIFIED_MEMORY_SET"]:
+if "UNIFIED_MEMORY_SET" in env:
     UNIFIED_MEMORY_SET=env["UNIFIED_MEMORY_SET"]
 
 if UNIFIED_MEMORY_SET == "yes":
