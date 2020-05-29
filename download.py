@@ -91,7 +91,9 @@ def download_celeb_a(dirpath):
     print('Found Celeb-A - skip')
     return
 
-  filename, drive_id  = "img_align_celeba.zip", "0B7EVK8r0v71pZjFTYXZWM3FlRnM"
+  #https://drive.google.com/open?id=0B7EVK8r0v71pWEZsZE9oNnFzTm8
+  #filename, drive_id  = "img_align_celeba.zip", "0B7EVK8r0v71pZjFTYXZWM3FlRnM"
+  filename, drive_id  = "img_align_celeba.zip", "0B7EVK8r0v71pWEZsZE9oNnFzTm8"
   save_path = os.path.join(dirpath, filename)
 
   if os.path.exists(save_path):
