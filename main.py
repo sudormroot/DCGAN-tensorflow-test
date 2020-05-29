@@ -59,6 +59,9 @@ flags.DEFINE_boolean("G_img_sum", False, "Save generator image summaries in log"
 #flags.DEFINE_integer("generate_test_images", 100, "Number of images to generate during test. [100]")
 FLAGS = flags.FLAGS
 
+os.environ["CUDA_VISIBLE_DEVICES"]="1"
+
+
 def main(_):
   pp.pprint(flags.FLAGS.__flags)
   
