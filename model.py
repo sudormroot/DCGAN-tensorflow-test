@@ -252,22 +252,108 @@ class DCGAN(object):
               .astype(np.float32)
 
         if config.dataset == 'mnist':
-          # Update D network
-          _, summary_str = self.sess.run([d_optim, self.d_sum],
-            feed_dict={ 
-              self.inputs: batch_images,
-              self.z: batch_z,
-              self.y:batch_labels,
-            })
-          self.writer.add_summary(summary_str, counter)
 
-          # Update G network
-          _, summary_str = self.sess.run([g_optim, self.g_sum],
-            feed_dict={
-              self.z: batch_z, 
-              self.y:batch_labels,
-            })
-          self.writer.add_summary(summary_str, counter)
+          if epoch == 10: 
+
+            # add by Jiaolin
+            # Create a profiler.
+            from tensorflow.python.profiler import model_analyzer
+            from tensorflow.python.profiler import option_builder
+
+            profiler = model_analyzer.Profiler(sess.graph)
+
+
+            run_options = tf.RunOptions(trace_level=tf.RunOptions.FULL_TRACE)
+            run_metadata = tf.RunMetadata()
+
+
+            # Update D network
+            _, summary_str = self.sess.run([d_optim, self.d_sum],
+                feed_dict={ 
+                self.inputs: batch_images,
+                self.z: batch_z,
+                self.y:batch_labels,
+                }#)
+                ,options=run_options
+                ,run_metadata=run_metadata)
+
+
+            self.writer.add_summary(summary_str, counter)
+
+            # add by jiaolin
+            # Print to stdout an analysis of the memory usage and the timing information
+            # broken down by operation types.
+            print("Update D network at epoch=%d"%epoch)
+            tf.profiler.profile(
+                    tf.get_default_graph(),
+                    run_meta=run_metadata,
+                    cmd='op',
+                    options=tf.profiler.ProfileOptionBuilder.time_and_memory())
+
+            profile_result="timeline.mnist.gpu.D-network-update.epoch-%d.umem-%s.batchsize-%d.json"%(epoch, UNIFIED_MEMORY_SET, FLAGS.batch_size)
+
+            print("profile_result=",profile_result)
+
+            # Create the Timeline object, and write it to a json
+            tl = timeline.Timeline(run_metadata.step_stats)
+            ctf = tl.generate_chrome_trace_format()
+            with open(profile_result, 'w') as tlf:
+                tlf.write(ctf)
+
+
+
+
+            # Update G network
+            _, summary_str = self.sess.run([g_optim, self.g_sum],
+                feed_dict={
+                self.z: batch_z, 
+                self.y:batch_labels,
+                }#)
+                ,options=run_options
+                ,run_metadata=run_metadata)
+
+            self.writer.add_summary(summary_str, counter)
+            
+            # add by jiaolin
+            # Print to stdout an analysis of the memory usage and the timing information
+            # broken down by operation types.
+            print("Update G network at epoch=%d"%epoch)
+            tf.profiler.profile(
+                    tf.get_default_graph(),
+                    run_meta=run_metadata,
+                    cmd='op',
+                    options=tf.profiler.ProfileOptionBuilder.time_and_memory())
+
+            profile_result="timeline.mnist.gpu.G-network-update.epoch-%d.umem-%s.batchsize-%d.json"%(epoch, UNIFIED_MEMORY_SET, FLAGS.batch_size)
+
+            print("profile_result=",profile_result)
+
+            # Create the Timeline object, and write it to a json
+            tl = timeline.Timeline(run_metadata.step_stats)
+            ctf = tl.generate_chrome_trace_format()
+            with open(profile_result, 'w') as tlf:
+                tlf.write(ctf)
+
+
+
+
+          else:
+            # Update D network
+            _, summary_str = self.sess.run([d_optim, self.d_sum],
+                feed_dict={ 
+                self.inputs: batch_images,
+                self.z: batch_z,
+                self.y:batch_labels,
+                })
+            self.writer.add_summary(summary_str, counter)
+
+            # Update G network
+            _, summary_str = self.sess.run([g_optim, self.g_sum],
+                feed_dict={
+                self.z: batch_z, 
+                self.y:batch_labels,
+                })
+            self.writer.add_summary(summary_str, counter)
 
           # Run g_optim twice to make sure that d_loss does not go to zero (different from paper)
           _, summary_str = self.sess.run([g_optim, self.g_sum],
@@ -289,8 +375,8 @@ class DCGAN(object):
         else:
 
           if epoch == 10:
-            # add by Jiaolin
 
+            # add by Jiaolin
             # Create a profiler.
             from tensorflow.python.profiler import model_analyzer
             from tensorflow.python.profiler import option_builder
@@ -324,7 +410,7 @@ class DCGAN(object):
                     cmd='op',
                     options=tf.profiler.ProfileOptionBuilder.time_and_memory())
 
-            profile_result="timeline.gpu.D-network-update.epoch-%d.umem-%s.batchsize-%d.json"%(epoch, UNIFIED_MEMORY_SET, FLAGS.batch_size)
+            profile_result="timeline.celeba.gpu.D-network-update.epoch-%d.umem-%s.batchsize-%d.json"%(epoch, UNIFIED_MEMORY_SET, FLAGS.batch_size)
 
             print("profile_result=",profile_result)
 
