@@ -253,7 +253,7 @@ class DCGAN(object):
 
         if config.dataset == 'mnist':
 
-          if epoch == 10: 
+          if counter == 10: 
 
             # add by Jiaolin
             # Create a profiler.
@@ -283,14 +283,14 @@ class DCGAN(object):
             # add by jiaolin
             # Print to stdout an analysis of the memory usage and the timing information
             # broken down by operation types.
-            print("Update D network at epoch=%d"%epoch)
+            print("Update D network at step=%d"%counter)
             tf.profiler.profile(
                     tf.get_default_graph(),
                     run_meta=run_metadata,
                     cmd='op',
                     options=tf.profiler.ProfileOptionBuilder.time_and_memory())
 
-            profile_result="timeline.mnist.gpu.D-network-update.epoch-%d.umem-%s.batchsize-%d.json"%(epoch, UNIFIED_MEMORY_SET, FLAGS.batch_size)
+            profile_result="timeline.mnist.gpu.D-network-update.step-%d.umem-%s.batchsize-%d.json"%(counter, UNIFIED_MEMORY_SET, FLAGS.batch_size)
 
             print("profile_result=",profile_result)
 
@@ -317,14 +317,14 @@ class DCGAN(object):
             # add by jiaolin
             # Print to stdout an analysis of the memory usage and the timing information
             # broken down by operation types.
-            print("Update G network at epoch=%d"%epoch)
+            print("Update G network at step=%d"%counter)
             tf.profiler.profile(
                     tf.get_default_graph(),
                     run_meta=run_metadata,
                     cmd='op',
                     options=tf.profiler.ProfileOptionBuilder.time_and_memory())
 
-            profile_result="timeline.mnist.gpu.G-network-update.epoch-%d.umem-%s.batchsize-%d.json"%(epoch, UNIFIED_MEMORY_SET, FLAGS.batch_size)
+            profile_result="timeline.mnist.gpu.G-network-update.step-%d.umem-%s.batchsize-%d.json"%(counter, UNIFIED_MEMORY_SET, FLAGS.batch_size)
 
             print("profile_result=",profile_result)
 
@@ -374,7 +374,7 @@ class DCGAN(object):
           })
         else:
 
-          if epoch == 10:
+          if counter == 10:
 
             # add by Jiaolin
             # Create a profiler.
@@ -403,14 +403,14 @@ class DCGAN(object):
             # add by jiaolin
             # Print to stdout an analysis of the memory usage and the timing information
             # broken down by operation types.
-            print("Update D network at epoch=%d"%epoch)
+            print("Update D network at step=%d"%counter)
             tf.profiler.profile(
                     tf.get_default_graph(),
                     run_meta=run_metadata,
                     cmd='op',
                     options=tf.profiler.ProfileOptionBuilder.time_and_memory())
 
-            profile_result="timeline.celeba.gpu.D-network-update.epoch-%d.umem-%s.batchsize-%d.json"%(epoch, UNIFIED_MEMORY_SET, FLAGS.batch_size)
+            profile_result="timeline.celeba.gpu.D-network-update.step-%d.umem-%s.batchsize-%d.json"%(counter, UNIFIED_MEMORY_SET, FLAGS.batch_size)
 
             print("profile_result=",profile_result)
 
@@ -438,14 +438,14 @@ class DCGAN(object):
             # add by jiaolin
             # Print to stdout an analysis of the memory usage and the timing information
             # broken down by operation types.
-            print("Update G network at epoch=%d"%epoch)
+            print("Update G network at step=%d"%counter)
             tf.profiler.profile(
                     tf.get_default_graph(),
                     run_meta=run_metadata,
                     cmd='op',
                     options=tf.profiler.ProfileOptionBuilder.time_and_memory())
 
-            profile_result="timeline.gpu.G-network-update.epoch-%d.umem-%s.batchsize-%d.json"%(epoch, UNIFIED_MEMORY_SET, FLAGS.batch_size)
+            profile_result="timeline.gpu.G-network-update.step-%d.umem-%s.batchsize-%d.json"%(counter, UNIFIED_MEMORY_SET, FLAGS.batch_size)
 
             print("profile_result=",profile_result)
 
