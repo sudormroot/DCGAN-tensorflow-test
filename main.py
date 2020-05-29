@@ -8,6 +8,26 @@ from utils import pp, visualize, to_json, show_all_variables, expand_path, times
 
 import tensorflow as tf
 
+
+#
+# add by Jiaolin for profiling
+#
+from tensorflow.python.client import timeline
+
+UNIFIED_MEMORY_SET="no"
+
+env = os.environ
+
+if env["UNIFIED_MEMORY_SET"]:
+    UNIFIED_MEMORY_SET=env["UNIFIED_MEMORY_SET"]
+
+if UNIFIED_MEMORY_SET == "yes":
+    gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=2, allow_growth = True)
+else:
+    gpu_options = tf.GPUOptions()
+
+
+
 flags = tf.app.flags
 flags.DEFINE_integer("epoch", 25, "Epoch to train [25]")
 flags.DEFINE_float("learning_rate", 0.0002, "Learning rate of for adam [0.0002]")
@@ -72,8 +92,12 @@ def main(_):
   
 
   #gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.333)
-  run_config = tf.ConfigProto()
+  #run_config = tf.ConfigProto()
+  
+  # fix by Jiaolin enabling unified memory according to environment variable
+  run_config = tf.ConfigProto(gpu_options=gpu_options)
   run_config.gpu_options.allow_growth=True
+
 
   with tf.Session(config=run_config) as sess:
     if FLAGS.dataset == 'mnist':
