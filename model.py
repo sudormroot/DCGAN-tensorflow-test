@@ -414,7 +414,7 @@ class DCGAN(object):
                     cmd='op',
                     options=tf.profiler.ProfileOptionBuilder.time_and_memory())
 
-            profile_result="timeline.celeba.gpu.D-network-update.step-%d.umem-%s.batchsize-%d.json"%(counter, UNIFIED_MEMORY_SET, batch_size)
+            profile_result="timeline.celeba.gpu.D-network-update.step-%d.umem-%s.batchsize-%d.json"%(counter, UNIFIED_MEMORY_SET, self.batch_size)
 
             print("profile_result=",profile_result)
 
@@ -449,7 +449,7 @@ class DCGAN(object):
                     cmd='op',
                     options=tf.profiler.ProfileOptionBuilder.time_and_memory())
 
-            profile_result="timeline.gpu.G-network-update.step-%d.umem-%s.batchsize-%d.json"%(counter, UNIFIED_MEMORY_SET, batch_size)
+            profile_result="timeline.gpu.G-network-update.step-%d.umem-%s.batchsize-%d.json"%(counter, UNIFIED_MEMORY_SET, self.batch_size)
 
             print("profile_result=",profile_result)
 
