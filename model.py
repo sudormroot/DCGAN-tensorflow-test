@@ -221,6 +221,10 @@ class DCGAN(object):
       print(" [!] Load failed...")
 
     for epoch in xrange(config.epoch):
+
+      if counter > 15:
+          exit()
+
       if config.dataset == 'mnist':
         batch_idxs = min(len(self.data_X), config.train_size) // config.batch_size
       else:      
@@ -260,7 +264,7 @@ class DCGAN(object):
             from tensorflow.python.profiler import model_analyzer
             from tensorflow.python.profiler import option_builder
 
-            profiler = model_analyzer.Profiler(sess.graph)
+            profiler = model_analyzer.Profiler(self.sess.graph)
 
 
             run_options = tf.RunOptions(trace_level=tf.RunOptions.FULL_TRACE)
@@ -381,7 +385,7 @@ class DCGAN(object):
             from tensorflow.python.profiler import model_analyzer
             from tensorflow.python.profiler import option_builder
 
-            profiler = model_analyzer.Profiler(sess.graph)
+            profiler = model_analyzer.Profiler(self.sess.graph)
 
 
             run_options = tf.RunOptions(trace_level=tf.RunOptions.FULL_TRACE)
